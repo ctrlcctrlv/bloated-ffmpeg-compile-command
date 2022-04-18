@@ -1,185 +1,3 @@
-# Bloated `ffmpeg` compile command
-
-only tested in Ubuntu but should work in Debian
-
-```plain
-#########################################################################
-#             ____  _      ___   ____ ______   ___ ___                  B
-#            |    \| T    /   \ /    |      T /  _|   \                 L
-#            |  o  | |   Y     Y  o  |      |/  [_|    \                O
-#            |     | l___|  O  |     l_j  l_Y    _|  D  Y               A
-#            |  O  |     |     |  _  | |  | |   [_|     |               T
-#            |     |     l     |  |  | |  | |     |     |               E
-#            |     |     l     |  |  | |  | |     |     |               D
-#            |     |     l     |  |  | |  | |     |     |               .
-#            l_____l_____j\___/l__j__j l__j l_____l_____j               .
-#                                                                       .
-#                        _   .-')      _ (`-.    ('-.                   .
-#                       ( '.( OO )_   ( (OO  ) _(  OO)                  F
-#     ,------.   ,------.,--.   ,--.)_.`     \(,------. ,----.          F
-#  ('-| _.---'('-| _.---'|   `.'   |(__...--'' |  .---''  .-./-')       M
-#  (OO|(_\    (OO|(_\    |         | |  /  | | |  |    |  |_( O- )      P
-#  /  |  '--. /  |  '--. |  |'.'|  | |  |_.' |(|  '--. |  | .--, \      E
-#  \_)|  .--' \_)|  .--' |  |   |  | |  .___.' |  .--'(|  | '. (_/      G
-#    \|  |_)    \|  |_)  |  |   |  | |  |      |  `---.|  '--'  |       .
-#     `--'       `--'    `--'   `--' `--'      `------' `------'        .
-#                                                                       .
-#                                      ██ ███                           .
-#            ███  ███  ███████  █████  ▒▒ ▒██  ███  ████                M
-#           ██▒▒ ██▒██ ██▒██▒██ ▒██▒██ ██ ▒██ ██▒██ ██▒██               A
-#           ██   ██▒██ ██▒██▒██ ▒██▒██ ██ ▒██ ████▒ ██                  P
-#           ██   ██▒██ ██▒██▒██  ██▒██ ██ ▒██ ██▒▒  ██                  A
-#           ▒███ ▒███▒ ██▒██▒███ ████  ██ ▒██ ▒███  ███                 C
-#            ▒▒▒  ▒▒▒  ▒▒ ▒▒ ▒▒▒ ██▒▒  ▒▒ ▒▒▒  ▒▒▒  ▒▒▒                 H
-#                               ███                                     E
-#                               ▒▒▒                                     🦝
-#                                                                       🎈
-#########################################################################
-```
-
-What it says on the tin.
-
-A friend saw my absurd `ffmpeg` invocation banner:
-
-```
-ffmpeg version N-106625-g4e98cc29f4 Copyright (c) 2000-2022 the FFmpeg developers
-  OwO what's this?
-  configuration: --prefix=/opt --enable-shared --enable-nvenc --enable-nvdec --enable-nonfree --enable-cuda-nvcc --enable-libnpp --extra-cflags=-I/usr/local/cuda/include --extra-ldflags='-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec' --enable-filter='stereo3d,asr,sofalizer' --enable-libaom --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libdav1d --enable-libvorbis --enable-libvpx --enable-nonfree --enable-vaapi --enable-opencl --enable-opengl --enable-libtesseract --enable-libwebp --enable-openssl --enable-libfontconfig --enable-libbluray --enable-libv4l2 --enable-libfribidi --enable-libspeex --enable-librsvg --enable-libssh --enable-libpulse --enable-libcaca --enable-librubberband --enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio --enable-libvidstab --enable-libsrt --enable-libglslang --enable-libsoxr --enable-pocketsphinx --enable-libflite --enable-gpl --enable-avisynth --enable-libaribb24 --enable-version3 --enable-libmysofa --enable-ffplay --disable-stripping --enable-debug
-  libavutil      57. 24.101 / 57. 24.101
-  libavcodec     59. 26.100 / 59. 26.100
-  libavformat    59. 22.100 / 59. 22.100
-  libavdevice    59.  6.100 / 59.  6.100
-  libavfilter     8. 33.100 /  8. 33.100
-  libswscale      6.  6.100 /  6.  6.100
-  libswresample   4.  6.100 /  4.  6.100
-  libpostproc    56.  5.100 / 56.  5.100
-Hyper fast Audio and Video encoder
-usage: ffmpeg [options] [[infile options] -i infile]... {[outfile options] outfile}...
-```
-
-And wanted to know how I got it. This version of ffmpeg has all of [these abilities](https://github.com/ctrlcctrlv/bloated-ffmpeg-compile-command/blob/main/doc/config_stdout.txt).
-
-# Effects
-You will need to create `/opt` if it's not a directory you use.
-
-## NVIDIA support
-Enables all these flags if it sees you have the binary `nvidia-smi`:
-1. --enable-nvdec
-1. --enable-nonfree
-1. --enable-cuda-nvcc
-1. --enable-libnpp
-1. --extra-cflags=`-I/usr/local/cuda/include`
-1. --extra-ldflags=`-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec`
-
-## Extra libraries
-Enables all these libraries also:
-1. --enable-filter=stereo3d,asr,sofalizer
-1. --enable-libaom
-1. --enable-libass
-1. --enable-libfdk-aac
-1. --enable-libfreetype
-1. --enable-libmp3lame
-1. --enable-libopus
-1. --enable-libdav1d
-1. --enable-libvorbis
-1. --enable-libvpx
-1. --enable-nonfree
-1. --enable-vaapi
-1. --enable-opencl
-1. --enable-opengl
-1. --enable-libtesseract
-1. --enable-libwebp
-1. --enable-openssl
-1. --enable-libfontconfig
-1. --enable-libbluray
-1. --enable-libv4l2
-1. --enable-libfribidi
-1. --enable-libspeex
-1. --enable-librsvg
-1. --enable-avisynth
-1. --enable-libssh
-1. --enable-libpulse
-1. --enable-libcaca
-1. --enable-librubberband
-1. --enable-libxcb-xfixes
-1. --enable-libdavs2
-1. --enable-frei0r
-1. --enable-libcdio
-1. --enable-libvidstab
-1. --enable-libsrt
-1. --enable-libglslang
-1. --enable-libsoxr
-1. --enable-pocketsphinx
-1. --enable-libflite
-1. --enable-libaribb24
-1. --enable-version3
-1. --enable-libmysofa
-
-## Debugging help
-And applies these:
-1. --enable-ffplay
-1. --disable-stripping
-1. --enable-debug
-
-## OwO what's this?
-Although easy to interpret as a joke in the above text, this was not one:
-
-```diff
-diff --git a/fftools/opt_common.c b/fftools/opt_common.c
-index c303db4d09..0a98378299 100644
---- a/fftools/opt_common.c
-+++ b/fftools/opt_common.c
-@@ -200,8 +200,7 @@ static void print_program_info(int flags, int level)
-         av_log(NULL, level, " Copyright (c) %d-%d the FFmpeg developers",
-                program_birth_year, CONFIG_THIS_YEAR);
-     av_log(NULL, level, "\n");
--    av_log(NULL, level, "%sbuilt with %s\n", indent, CC_IDENT);
--
-+    av_log(NULL, level, "%sOwO what's this?\n", indent);
-     av_log(NULL, level, "%sconfiguration: " FFMPEG_CONFIGURATION "\n", indent);
- }
- 
-```
-
-This patch is applied so that you know you're running your `ffmpeg` not the system's.
-
-## Environment variables
-
-If you run as `APT_INSTALL=y ./compile_command.sh`, it will install ≈206 packages. `grep` for `$APT_INSTALL` for a list. List may be incomplete or overly detailed, sorry.
-
-If you run as `DOGIT=y …`, it will reset git.
-
-A successful invocation looks like:
-
-**stdin**
-```
-$ ./compile-command.sh
-```
-**stdout**
-```
-+ NVIDIASHIT=('--enable-shared' '--enable-nvenc' '--enable-nvdec' '--enable-nonfree' '--enable-cuda-nvcc' '--enable-libnpp' '--extra-cflags=-I/usr/local/cuda/include' '--extra-ldflags=-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec')
-+ [[ -n '' ]]
-++ git diff-index --name-only HEAD --
-+ GIT_CHANGES=
-+ for f in *.patch
-+ git diff-index --name-only HEAD --
-++ basename --suffix=.patch opt_common.c.patch
-+ grep opt_common.c
-+ git apply --verbose opt_common.c.patch
-Checking patch fftools/opt_common.c...
-Applied patch fftools/opt_common.c cleanly.
-+ hash nvidia-smi
-+ test '!' -e /opt/include/ffnvcodec/nvEncodeAPI.h
-+ hash nvidia-smi
-+ [[ -n '' ]]
-+ tee config_stdout.txt
-++ /bin/bash -c 'tput cols'
-+ ncols=236
-+ PKG_CONFIG_PATH=/opt/lib/pkgconfig
-+ ./configure --prefix=/opt --enable-shared --enable-nvenc --enable-nvdec --enable-nonfree --enable-cuda-nvcc --enable-libnpp --extra-cflags=-I/usr/local/cuda/include '--extra-ldflags=-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec' --enable-filter=stereo3d,asr,sofalizer --enable-libaom --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libdav1d --enable-libvorbis --enable-libvpx --enable-nonfree --enable-vaapi --enable-opencl --enable-opengl --enable-libtesseract --enable-libwebp --enable-openssl --enable-libfontconfig --enable-libbluray --enable-libv4l2 --enable-libfribidi --enable-libspeex --enable-librsvg --enable-libssh --enable-libpulse --enable-libcaca --enable-librubberband --enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio --enable-libvidstab --enable-libsrt --enable-libglslang --enable-libsoxr --enable-pocketsphinx --enable-libflite --enable-gpl --enable-avisynth --enable-libaribb24 --enable-version3 --enable-libmysofa --enable-ffplay --disable-stripping --enable-debug
-```
-**stdout + config_stdout.txt (`tee`)**
-```
 install prefix            /opt
 source path               .
 C compiler                gcc
@@ -217,7 +35,7 @@ postprocessing support    yes
 network support           yes
 threading support         pthreads
 safe bitstream reader     yes
-texi2html enabled         no
+texi2html enabled         yes
 perl enabled              yes
 pod2man enabled           yes
 makeinfo enabled          no
@@ -225,11 +43,12 @@ makeinfo supports HTML    no
 xmllint enabled           yes
 
 External libraries:
-avisynth                libass                  libdavs2                libfribidi              libopus                 libspeex                libvidstab              libxcb_shape            openssl
-frei0r                  libbluray               libfdk_aac              libglslang              libpulse                libsrt                  libvorbis               libxcb_shm              pocketsphinx
-iconv                   libcaca                 libflite                liblensfun              librsvg                 libssh                  libvpx                  libxcb_xfixes           zlib
-libaom                  libcdio                 libfontconfig           libmp3lame              librubberband           libtesseract            libwebp                 lzma
-libaribb24              libdav1d                libfreetype             libmysofa               libsoxr                 libv4l2                 libxcb                  opengl
+alsa                    libass                  libfdk_aac              libmp3lame              libsoxr                 libvidstab              libxcb_shm              sdl2
+avisynth                libbluray               libflite                libmysofa               libspeex                libvorbis               libxcb_xfixes           sndio
+frei0r                  libcaca                 libfontconfig           libopus                 libsrt                  libvpx                  lzma                    xlib
+iconv                   libcdio                 libfreetype             libpulse                libssh                  libwebp                 opengl                  zlib
+libaom                  libdav1d                libfribidi              librsvg                 libtesseract            libxcb                  openssl
+libaribb24              libdavs2                libglslang              librubberband           libv4l2                 libxcb_shape            pocketsphinx
 
 External libraries providing hardware acceleration:
 cuda                    cuda_nvcc               ffnvcodec               nvdec                   opencl                  vaapi
@@ -239,7 +58,7 @@ Libraries:
 avcodec                 avdevice                avfilter                avformat                avutil                  postproc                swresample              swscale
 
 Programs:
-ffmpeg                  ffprobe
+ffmpeg                  ffplay                  ffprobe
 
 Enabled decoders:
 aac                     adpcm_yamaha            cljr                    fmvc                    libaribb24              msnsiren                pcm_u32le               siren                   vmdaudio
@@ -406,62 +225,62 @@ concat                  ffrtmphttp              hls                     ipfs    
 concatf                 file                    http                    ipns                    mmst                    rtmps                   srtp                    udp
 
 Enabled filters:
-abench                  anlms                   blackframe              deflicker               framerate               lowpass                 perspective             sharpness_vaapi         tile
-abitscope               anoisesrc               blend                   deinterlace_vaapi       framestep               lowshelf                phase                   shear                   tinterlace
-acompressor             anull                   bm3d                    dejudder                freezedetect            lumakey                 photosensitivity        showcqt                 tlut2
-acontrast               anullsink               boxblur                 delogo                  freezeframes            lut                     pixdesctest             showfreqs               tmedian
-acopy                   anullsrc                boxblur_opencl          denoise_vaapi           frei0r                  lut1d                   pixelize                showinfo                tmidequalizer
-acrossfade              apad                    bwdif                   derain                  frei0r_src              lut2                    pixscope                showpalette             tmix
-acrossover              aperms                  cas                     deshake                 fspp                    lut3d                   pp                      showspatial             tonemap
-acrusher                aphasemeter             cellauto                deshake_opencl          gblur                   lutrgb                  pp7                     showspectrum            tonemap_opencl
-acue                    aphaser                 channelmap              despill                 geq                     lutyuv                  premultiply             showspectrumpic         tonemap_vaapi
-addroi                  aphaseshift             channelsplit            detelecine              gradfun                 mandelbrot              prewitt                 showvolume              tpad
-adeclick                apsyclip                chorus                  dialoguenhance          gradients               maskedclamp             prewitt_opencl          showwaves               transpose
-adeclip                 apulsator               chromahold              dilation                graphmonitor            maskedmax               procamp_vaapi           showwavespic            transpose_npp
-adecorrelate            arealtime               chromakey               dilation_opencl         grayworld               maskedmerge             program_opencl          shuffleframes           transpose_opencl
-adelay                  aresample               chromanr                displace                greyedge                maskedmin               pseudocolor             shufflepixels           transpose_vaapi
-adenorm                 areverse                chromashift             dnn_classify            guided                  maskedthreshold         psnr                    shuffleplanes           treble
-aderivative             arnndn                  ciescope                dnn_detect              haas                    maskfun                 pullup                  sidechaincompress       tremolo
-adrawgraph              asdr                    codecview               dnn_processing          haldclut                mcompand                qp                      sidechaingate           trim
-adynamicequalizer       asegment                color                   doubleweave             haldclutsrc             median                  random                  sidedata                unpremultiply
-adynamicsmooth          aselect                 colorbalance            drawbox                 hdcd                    mergeplanes             readeia608              sierpinski              unsharp
-aecho                   asendcmd                colorchannelmixer       drawgraph               headphone               mestimate               readvitc                signalstats             unsharp_opencl
-aemphasis               asetnsamples            colorcontrast           drawgrid                hflip                   metadata                realtime                signature               untile
-aeval                   asetpts                 colorcorrect            drawtext                highpass                midequalizer            remap                   silencedetect           v360
-aevalsrc                asetrate                colorhold               drmeter                 highshelf               minterpolate            removegrain             silenceremove           vaguedenoiser
-aexciter                asettb                  colorize                dynaudnorm              hilbert                 mix                     removelogo              sinc                    varblur
-afade                   ashowinfo               colorkey                earwax                  histeq                  monochrome              repeatfields            sine                    vectorscope
-afftdn                  asidedata               colorkey_opencl         ebur128                 histogram               morpho                  replaygain              siti                    vflip
-afftfilt                asoftclip               colorlevels             edgedetect              hqdn3d                  movie                   reverse                 smartblur               vfrdet
-afifo                   aspectralstats          colormatrix             elbg                    hqx                     mpdecimate              rgbashift               smptebars               vibrance
-afir                    asplit                  colorspace              entropy                 hstack                  mptestsrc               rgbtestsrc              smptehdbars             vibrato
-afirsrc                 asr                     colorspectrum           epx                     hsvhold                 msad                    roberts                 sobel                   vidstabdetect
-aformat                 ass                     colortemperature        eq                      hsvkey                  negate                  roberts_opencl          sobel_opencl            vidstabtransform
-afreqshift              astats                  compand                 equalizer               hue                     nlmeans                 rotate                  sofalizer               vif
-afwtdn                  astreamselect           compensationdelay       erosion                 huesaturation           nlmeans_opencl          rubberband              spectrumsynth           vignette
-agate                   asubboost               concat                  erosion_opencl          hwdownload              nnedi                   sab                     speechnorm              vmafmotion
-agraphmonitor           asubcut                 convolution             estdif                  hwmap                   noformat                scale                   split                   volume
-ahistogram              asupercut               convolution_opencl      exposure                hwupload                noise                   scale2ref               spp                     volumedetect
-aiir                    asuperpass              convolve                extractplanes           hwupload_cuda           normalize               scale2ref_npp           sr                      vstack
-aintegral               asuperstop              copy                    extrastereo             hysteresis              null                    scale_cuda              ssim                    w3fdif
-ainterleave             atadenoise              cover_rect              fade                    identity                nullsink                scale_npp               stereo3d                waveform
-alatency                atempo                  crop                    feedback                idet                    nullsrc                 scale_vaapi             stereotools             weave
-alimiter                atilt                   cropdetect              fftdnoiz                il                      ocr                     scdet                   stereowiden             xbr
-allpass                 atrim                   crossfeed               fftfilt                 inflate                 openclsrc               scharr                  streamselect            xcorrelate
-allrgb                  avectorscope            crystalizer             field                   interlace               oscilloscope            scroll                  subtitles               xfade
-allyuv                  avgblur                 cue                     fieldhint               interleave              overlay                 segment                 super2xsai              xfade_opencl
-aloop                   avgblur_opencl          curves                  fieldmatch              join                    overlay_cuda            select                  superequalizer          xmedian
-alphaextract            avsynctest              datascope               fieldorder              kerndeint               overlay_opencl          selectivecolor          surround                xstack
-alphamerge              axcorrelate             dblur                   fifo                    kirsch                  overlay_vaapi           sendcmd                 swaprect                yadif
-amerge                  bandpass                dcshift                 fillborders             lagfun                  owdenoise               separatefields          swapuv                  yadif_cuda
-ametadata               bandreject              dctdnoiz                find_rect               latency                 pad                     setdar                  tblend                  yaepblur
-amix                    bass                    deband                  firequalizer            lenscorrection          pad_opencl              setfield                telecine                yuvtestsrc
-amovie                  bbox                    deblock                 flanger                 lensfun                 pal100bars              setparams               testsrc                 zoompan
-amplify                 bench                   decimate                flite                   life                    pal75bars               setpts                  testsrc2
-amultiply               bilateral               deconvolve              floodfill               limitdiff               palettegen              setrange                thistogram
-anequalizer             biquad                  dedot                   format                  limiter                 paletteuse              setsar                  threshold
-anlmdn                  bitplanenoise           deesser                 fps                     loop                    pan                     settb                   thumbnail
-anlmf                   blackdetect             deflate                 framepack               loudnorm                perms                   sharpen_npp             thumbnail_cuda
+abench                  anlms                   blackframe              deflicker               framerate               lowshelf                phase                   shear                   tinterlace
+abitscope               anoisesrc               blend                   deinterlace_vaapi       framestep               lumakey                 photosensitivity        showcqt                 tlut2
+acompressor             anull                   bm3d                    dejudder                freezedetect            lut                     pixdesctest             showfreqs               tmedian
+acontrast               anullsink               boxblur                 delogo                  freezeframes            lut1d                   pixelize                showinfo                tmidequalizer
+acopy                   anullsrc                boxblur_opencl          denoise_vaapi           frei0r                  lut2                    pixscope                showpalette             tmix
+acrossfade              apad                    bwdif                   derain                  frei0r_src              lut3d                   pp                      showspatial             tonemap
+acrossover              aperms                  cas                     deshake                 fspp                    lutrgb                  pp7                     showspectrum            tonemap_opencl
+acrusher                aphasemeter             cellauto                deshake_opencl          gblur                   lutyuv                  premultiply             showspectrumpic         tonemap_vaapi
+acue                    aphaser                 channelmap              despill                 geq                     mandelbrot              prewitt                 showvolume              tpad
+addroi                  aphaseshift             channelsplit            detelecine              gradfun                 maskedclamp             prewitt_opencl          showwaves               transpose
+adeclick                apsyclip                chorus                  dialoguenhance          gradients               maskedmax               procamp_vaapi           showwavespic            transpose_npp
+adeclip                 apulsator               chromahold              dilation                graphmonitor            maskedmerge             program_opencl          shuffleframes           transpose_opencl
+adecorrelate            arealtime               chromakey               dilation_opencl         grayworld               maskedmin               pseudocolor             shufflepixels           transpose_vaapi
+adelay                  aresample               chromanr                displace                greyedge                maskedthreshold         psnr                    shuffleplanes           treble
+adenorm                 areverse                chromashift             dnn_classify            guided                  maskfun                 pullup                  sidechaincompress       tremolo
+aderivative             arnndn                  ciescope                dnn_detect              haas                    mcompand                qp                      sidechaingate           trim
+adrawgraph              asdr                    codecview               dnn_processing          haldclut                median                  random                  sidedata                unpremultiply
+adynamicequalizer       asegment                color                   doubleweave             haldclutsrc             mergeplanes             readeia608              sierpinski              unsharp
+adynamicsmooth          aselect                 colorbalance            drawbox                 hdcd                    mestimate               readvitc                signalstats             unsharp_opencl
+aecho                   asendcmd                colorchannelmixer       drawgraph               headphone               metadata                realtime                signature               untile
+aemphasis               asetnsamples            colorcontrast           drawgrid                hflip                   midequalizer            remap                   silencedetect           v360
+aeval                   asetpts                 colorcorrect            drawtext                highpass                minterpolate            removegrain             silenceremove           vaguedenoiser
+aevalsrc                asetrate                colorhold               drmeter                 highshelf               mix                     removelogo              sinc                    varblur
+aexciter                asettb                  colorize                dynaudnorm              hilbert                 monochrome              repeatfields            sine                    vectorscope
+afade                   ashowinfo               colorkey                earwax                  histeq                  morpho                  replaygain              siti                    vflip
+afftdn                  asidedata               colorkey_opencl         ebur128                 histogram               movie                   reverse                 smartblur               vfrdet
+afftfilt                asoftclip               colorlevels             edgedetect              hqdn3d                  mpdecimate              rgbashift               smptebars               vibrance
+afifo                   aspectralstats          colormatrix             elbg                    hqx                     mptestsrc               rgbtestsrc              smptehdbars             vibrato
+afir                    asplit                  colorspace              entropy                 hstack                  msad                    roberts                 sobel                   vidstabdetect
+afirsrc                 asr                     colorspectrum           epx                     hsvhold                 negate                  roberts_opencl          sobel_opencl            vidstabtransform
+aformat                 ass                     colortemperature        eq                      hsvkey                  nlmeans                 rotate                  sofalizer               vif
+afreqshift              astats                  compand                 equalizer               hue                     nlmeans_opencl          rubberband              spectrumsynth           vignette
+afwtdn                  astreamselect           compensationdelay       erosion                 huesaturation           nnedi                   sab                     speechnorm              vmafmotion
+agate                   asubboost               concat                  erosion_opencl          hwdownload              noformat                scale                   split                   volume
+agraphmonitor           asubcut                 convolution             estdif                  hwmap                   noise                   scale2ref               spp                     volumedetect
+ahistogram              asupercut               convolution_opencl      exposure                hwupload                normalize               scale2ref_npp           sr                      vstack
+aiir                    asuperpass              convolve                extractplanes           hwupload_cuda           null                    scale_cuda              ssim                    w3fdif
+aintegral               asuperstop              copy                    extrastereo             hysteresis              nullsink                scale_npp               stereo3d                waveform
+ainterleave             atadenoise              cover_rect              fade                    identity                nullsrc                 scale_vaapi             stereotools             weave
+alatency                atempo                  crop                    feedback                idet                    ocr                     scdet                   stereowiden             xbr
+alimiter                atilt                   cropdetect              fftdnoiz                il                      openclsrc               scharr                  streamselect            xcorrelate
+allpass                 atrim                   crossfeed               fftfilt                 inflate                 oscilloscope            scroll                  subtitles               xfade
+allrgb                  avectorscope            crystalizer             field                   interlace               overlay                 segment                 super2xsai              xfade_opencl
+allyuv                  avgblur                 cue                     fieldhint               interleave              overlay_cuda            select                  superequalizer          xmedian
+aloop                   avgblur_opencl          curves                  fieldmatch              join                    overlay_opencl          selectivecolor          surround                xstack
+alphaextract            avsynctest              datascope               fieldorder              kerndeint               overlay_vaapi           sendcmd                 swaprect                yadif
+alphamerge              axcorrelate             dblur                   fifo                    kirsch                  owdenoise               separatefields          swapuv                  yadif_cuda
+amerge                  bandpass                dcshift                 fillborders             lagfun                  pad                     setdar                  tblend                  yaepblur
+ametadata               bandreject              dctdnoiz                find_rect               latency                 pad_opencl              setfield                telecine                yuvtestsrc
+amix                    bass                    deband                  firequalizer            lenscorrection          pal100bars              setparams               testsrc                 zoompan
+amovie                  bbox                    deblock                 flanger                 life                    pal75bars               setpts                  testsrc2
+amplify                 bench                   decimate                flite                   limitdiff               palettegen              setrange                thistogram
+amultiply               bilateral               deconvolve              floodfill               limiter                 paletteuse              setsar                  threshold
+anequalizer             biquad                  dedot                   format                  loop                    pan                     settb                   thumbnail
+anlmdn                  bitplanenoise           deesser                 fps                     loudnorm                perms                   sharpen_npp             thumbnail_cuda
+anlmf                   blackdetect             deflate                 framepack               lowpass                 perspective             sharpness_vaapi         tile
 
 Enabled bsfs:
 aac_adtstoasc           dca_core                filter_units            hevc_metadata           mov2textsub             null                    setts                   vp9_raw_reorder
@@ -471,14 +290,13 @@ av1_metadata            eac3_core               h264_redundant_pps      mjpeg2jp
 chomp                   extract_extradata       hapqa_extract           mjpega_dump_header      noise                   remove_extradata        vp9_metadata
 
 Enabled indevs:
-fbdev                   lavfi                   libcdio                 oss                     pulse                   v4l2                    xcbgrab
+alsa                    fbdev                   lavfi                   libcdio                 oss                     pulse                   sndio                   v4l2                    xcbgrab
 
 Enabled outdevs:
-caca                    fbdev                   opengl                  oss                     pulse                   v4l2
+alsa                    fbdev                   oss                     sdl2                    v4l2
+caca                    opengl                  pulse                   sndio                   xv
 
 License: nonfree and unredistributable
-config.h is unchanged
-config.asm is unchanged
 config_components.h is unchanged
 libavutil/avconfig.h is unchanged
 libavfilter/filter_list.c is unchanged
@@ -491,36 +309,3 @@ libavdevice/indev_list.c is unchanged
 libavdevice/outdev_list.c is unchanged
 libavformat/protocol_list.c is unchanged
 ffbuild/config.sh is unchanged
-```
-
-Resulting in `ffbuild/config.sh` with contents:
-```bash
-# Automatically generated by configure - do not modify!
-shared=yes
-build_suffix=
-prefix=/opt
-libdir=${prefix}/lib
-incdir=${prefix}/include
-rpath=
-source_path=.
-LIBPREF=lib
-LIBSUF=.a
-extralibs_avutil="-pthread -lva-drm -lva -lva-x11 -lva -lvdpau -lX11 -lm -lOpenCL -lva -latomic -lX11"
-extralibs_avcodec="-lvpx -lm -lvpx -lm -lvpx -lm -lvpx -lm -lwebpmux -lwebp -pthread -lm -latomic -llzma -laribb24 -ldav1d -ldavs2 -lrsvg-2 -lm -lgio-2.0 -lgdk_pixbuf-2.0 -lgobject-2.0 -lglib-2.0 -lcairo -laom -lm -lpthread -lfdk-aac -lmp3lame -lm -lopus -lspeex -lvorbis -lvorbisenc -lwebp -lz -lva"
-extralibs_avformat="-lm -latomic -lbluray -lz -lssl -lcrypto -lsrt-gnutls -lssh"
-extralibs_avdevice="-lm -latomic -lxcb -lxcb-shm -lxcb-shape -lxcb-xfixes -lcdio_paranoia -lcdio_cdda -lcdio -lm -lcaca -lGL -lpulse -pthread -lv4l2"
-extralibs_avfilter="-pthread -lm -latomic -lpocketsphinx -lsphinxbase -lsphinxad -lrubberband -lstdc++ -lmysofa -lflite_cmu_time_awb -lflite_cmu_us_awb -lflite_cmu_us_kal -lflite_cmu_us_kal16 -lflite_cmu_us_rms -lflite_cmu_us_slt -lflite_usenglish -lflite_cmulex -lflite -lfribidi -llensfun -ltesseract -larchive -lass -lnppig -lnppicc -lnppc -lnppidei -lnppif -lva -lvidstab -lm -lgomp -lOpenCL -lfontconfig -lfreetype -lfreetype"
-extralibs_postproc="-lm -latomic"
-extralibs_swscale="-lm -latomic"
-extralibs_swresample="-lm -lsoxr -latomic"
-avdevice_deps="avfilter swscale postproc avformat avcodec swresample avutil"
-avfilter_deps="swscale postproc avformat avcodec swresample avutil"
-swscale_deps="avutil"
-postproc_deps="avutil"
-avformat_deps="avcodec swresample avutil"
-avcodec_deps="swresample avutil"
-swresample_deps="avutil"
-avutil_deps=""
-```
-
-If this script is making your life harder rather than easier, quit using it. :)
