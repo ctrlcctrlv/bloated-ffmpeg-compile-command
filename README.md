@@ -59,6 +59,10 @@ usage: ffmpeg [options] [[infile options] -i infile]... {[outfile options] outfi
 
 And wanted to know how I got it.
 
+# Effects
+You will need to create `/opt` if it's not a directory you use.
+
+## NVIDIA support
 Enables all these flags if it sees you have the binary `nvidia-smi`:
 1. --enable-nvdec
 1. --enable-nonfree
@@ -67,6 +71,7 @@ Enables all these flags if it sees you have the binary `nvidia-smi`:
 1. --extra-cflags=`-I/usr/local/cuda/include`
 1. --extra-ldflags=`-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec`
 
+## Extra libraries
 Enables all these libraries also:
 1. --enable-filter=stereo3d,asr,sofalizer
 1. --enable-libaom
@@ -110,10 +115,35 @@ Enables all these libraries also:
 1. --enable-version3
 1. --enable-libmysofa
 
+## Debugging help
 And applies these:
 1. --enable-ffplay
 1. --disable-stripping
 1. --enable-debug
+
+## OwO what's this?
+Although easy to interpret as a joke in the above text, this was not one:
+
+```diff
+diff --git a/fftools/opt_common.c b/fftools/opt_common.c
+index c303db4d09..0a98378299 100644
+--- a/fftools/opt_common.c
++++ b/fftools/opt_common.c
+@@ -200,8 +200,7 @@ static void print_program_info(int flags, int level)
+         av_log(NULL, level, " Copyright (c) %d-%d the FFmpeg developers",
+                program_birth_year, CONFIG_THIS_YEAR);
+     av_log(NULL, level, "\n");
+-    av_log(NULL, level, "%sbuilt with %s\n", indent, CC_IDENT);
+-
++    av_log(NULL, level, "%sOwO what's this?\n", indent);
+     av_log(NULL, level, "%sconfiguration: " FFMPEG_CONFIGURATION "\n", indent);
+ }
+ 
+```
+
+This patch is applied so that you know you're running your `ffmpeg` not the system's.
+
+## Environment variables
 
 If you run as `APT_INSTALL=y ./compile_command.sh`, it will install ≈206 packages. `grep` for `$APT_INSTALL` for a list. List may be incomplete or overly detailed, sorry.
 
