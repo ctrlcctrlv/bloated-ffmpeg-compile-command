@@ -1,4 +1,4 @@
-# Bloated `ffmpeg` compile command
+# Bloated `ffmpeg` compile command v1.0
 
 only tested in Ubuntu but should work in Debian
 
@@ -41,10 +41,25 @@ What it says on the tin.
 
 A friend saw my absurd `ffmpeg` invocation banner:
 
-```
-ffmpeg version N-106625-g4e98cc29f4 Copyright (c) 2000-2022 the FFmpeg developers
+```plain
+ffmpeg version N-108223-g32129d6495 Copyright (c) 2000-2022 the FFmpeg developers
   OwO what's this?
-  configuration: --prefix=/opt --enable-shared --enable-nvenc --enable-nvdec --enable-nonfree --enable-cuda-nvcc --enable-libnpp --extra-cflags=-I/usr/local/cuda/include --extra-ldflags='-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec' --enable-filter='stereo3d,asr,sofalizer' --enable-libaom --enable-libass --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus --enable-libdav1d --enable-libvorbis --enable-libvpx --enable-nonfree --enable-vaapi --enable-opencl --enable-opengl --enable-libtesseract --enable-libwebp --enable-openssl --enable-libfontconfig --enable-libbluray --enable-libv4l2 --enable-libfribidi --enable-libspeex --enable-librsvg --enable-libssh --enable-libpulse --enable-libcaca --enable-librubberband --enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio --enable-libvidstab --enable-libsrt --enable-libglslang --enable-libsoxr --enable-pocketsphinx --enable-libflite --enable-gpl --enable-avisynth --enable-libaribb24 --enable-version3 --enable-libmysofa --enable-ffplay --disable-stripping --enable-debug
+  configuration: --prefix=/opt --enable-shared --enable-nvenc --enable-nvdec
+    --enable-nonfree --enable-cuda-nvcc --enable-libnpp
+    --extra-cflags=-I/usr/local/cuda/include
+    --extra-ldflags='-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec'
+    --enable-filter='stereo3d,asr,sofalizer' --enable-libaom --enable-libass
+    --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus
+    --enable-libdav1d --enable-libvorbis --enable-libvpx --enable-nonfree
+    --enable-vaapi --enable-opencl --enable-opengl --enable-libtesseract
+    --enable-libwebp --enable-openssl --enable-libfontconfig --enable-libbluray
+    --enable-libv4l2 --enable-libfribidi --enable-libspeex --enable-librsvg
+    --enable-libssh --enable-libpulse --enable-libcaca --enable-librubberband
+    --enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio
+    --enable-libvidstab --enable-libsrt --enable-libglslang --enable-libsoxr
+    --enable-pocketsphinx --enable-libflite --enable-gpl --enable-avisynth
+    --enable-libaribb24 --enable-version3 --enable-libmysofa --enable-ffplay
+    --disable-stripping --enable-debug
   libavutil      57. 24.101 / 57. 24.101
   libavcodec     59. 26.100 / 59. 26.100
   libavformat    59. 22.100 / 59. 22.100
@@ -59,8 +74,217 @@ usage: ffmpeg [options] [[infile options] -i infile]... {[outfile options] outfi
 
 And wanted to know how I got it. This version of ffmpeg has all of [these abilities](https://github.com/ctrlcctrlv/bloated-ffmpeg-compile-command/blob/main/doc/config_stdout.txt).
 
+# Just how bloated is bloated?
+Quite.
+
+<img src="doc/コピペ.webp" width="200">
+<sup><sub>Not this much though! Art by @<a href="https://twitter.com/Haruk000_">haruk000_</a>.</sub></sup>
+
+Factoring in all shared libraries the Mapache bloated `ffmpeg` weighs 457 megabytes all told, with its `libavcodec.so` ranking first for size.
+```bash
+#!/bin/bash
+doc/bin-size.sh ffmpeg | tac # | ansi2txt
+```
+```plain
+  458.83MB	total
+   64.00MB			/opt/lib/libavcodec.so.59.44.100
+   60.72MB	(stripped!)	/opt/cuda-11.4/targets/x86_64-linux/lib/libnppif.so.11.4.0.110
+   58.23MB			/opt/lib/libtesseract.so.5.0.2
+   36.26MB	(stripped!)	/usr/lib/x86_64-linux-gnu/openblas-pthread/libopenblasp-r0.3.20.so
+   30.65MB	(stripped!)	/opt/cuda-11.4/targets/x86_64-linux/lib/libnppig.so.11.4.0.110
+   28.12MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libicudata.so.70.1
+   27.65MB			/opt/lib/libavfilter.so.8.49.100
+   16.10MB			/opt/lib/libavformat.so.59.32.100
+   10.72MB	(stripped!)	/usr/lib/x86_64-linux-gnu/librsvg-2.so.2.48.0
+    9.21MB	(stripped!)	/opt/cuda-11.4/targets/x86_64-linux/lib/libnppidei.so.11.4.0.110
+    6.77MB	(stripped!)	/usr/lib/x86_64-linux-gnu/openblas-pthread/liblapack.so.3
+    6.03MB	(stripped!)	/opt/cuda-11.4/targets/x86_64-linux/lib/libnppicc.so.11.4.0.110
+    5.14MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libaom.so.3.3.0
+    4.60MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libflite_cmu_us_rms.so.2.2
+    4.25MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcrypto.so.3
+    3.97MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libflite_cmu_us_slt.so.2.2
+    3.96MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libflite_cmu_us_awb.so.2.2
+    3.85MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libflite_cmu_us_kal16.so.2.2
+    3.05MB			/opt/lib/libavutil.so.57.36.102
+    3.03MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libvpx.so.7.0.0
+    2.86MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgfortran.so.5.0.0
+    2.72MB			/opt/lib/libswscale.so.6.8.112
+    2.67MB	(stripped!)	/usr/lib/x86_64-linux-gnu/liblept.so.5.0.4
+    2.15MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.30
+    2.12MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libc.so.6
+    1.97MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libicuuc.so.70.1
+    1.91MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgnutls.so.30.31.0
+    1.88MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libxml2.so.2.9.13
+    1.84MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgio-2.0.so.0.7200.1
+    1.67MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libunistring.so.2.2.0
+    1.60MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libSDL2-2.0.so.0.18.2
+    1.51MB	(stripped!)	/opt/cuda-11.4/targets/x86_64-linux/lib/libnppc.so.11.4.0.110
+    1.43MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libsamplerate.so.0.2.2
+    1.40MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libflite_cmu_us_kal.so.2.2
+    1.33MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libslang.so.2.3.2
+    1.26MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libdav1d.so.5.1.1
+    1.25MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libX11.so.6.4.0
+    1.24MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgcrypt.so.20.3.4
+    1.23MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libp11-kit.so.0.3.0
+    1.22MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libglib-2.0.so.0.7200.1
+    1.19MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libfdk-aac.so.2.0.2
+    1.15MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcairo.so.2.11600.0
+    1.09MB			/opt/bin/ffmpeg
+    1.02MB	(stripped!)	/usr/lib/x86_64-linux-gnu/libasound.so.2.0.0
+  951.20KB			/opt/lib/libavdevice.so.59.8.101
+  918.52KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libm.so.6
+  824.83KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libharfbuzz.so.0.20704.0
+  822.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libzstd.so.1.4.8
+  808.60KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libkrb5.so.3.3
+  807.97KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcaca.so.0.99.19
+  802.10KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libarchive.so.13.6.0
+  794.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libfreetype.so.6.18.1
+  789.00KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libsystemd.so.0.32.0
+  742.93KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libsrt-gnutls.so.1.4.4
+  698.44KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libGLdispatch.so.0.0.0
+  678.18KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpixman-1.so.0.40.0
+  678.14KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libvorbisenc.so.2.0.12
+  658.20KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libdavs2.so.16
+  652.22KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libssl.so.3
+  637.78KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcurl-gnutls.so.4.7.0
+  602.23KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libflite_cmulex.so.2.2
+  598.70KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.10.4
+  530.33KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libGL.so.1.7.0
+  530.17KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libtiff.so.5.7.0
+  526.33KB	(stripped!)	/usr/lib/x86_64-linux-gnu/pulseaudio/libpulsecommon-15.99.so
+  514.55KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgmp.so.10.4.1
+  510.71KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libjpeg.so.8.2.2
+  496.54KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libsndfile.so.1.0.31
+  466.11KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpcre.so.3.13.3
+  431.59KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libssh.so.4.8.7
+  418.55KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libwebp.so.7.1.3
+  407.75KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpango-1.0.so.0.5000.6
+  386.50KB	(stripped!)	/usr/lib/x86_64-linux-gnu/openblas-pthread/libblas.so.3
+  383.00KB			/opt/lib/libswresample.so.4.9.100
+  378.39KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgobject-2.0.so.0.7200.1
+  374.35KB			/opt/lib/libpostproc.so.56.7.100
+  370.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libopus.so.0.8.0
+  367.69KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libldap-2.5.so.0.1.8
+  346.49KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libopenjp2.so.2.4.0
+  342.98KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libbluray.so.2.4.1
+  335.20KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpulse.so.0.24.1
+  330.78KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgssapi_krb5.so.2.2
+  306.31KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libdbus-1.so.3.19.13
+  291.78KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgomp.so.1.0.0
+  291.14KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libfontconfig.so.1.12.0
+  290.85KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpocketsphinx.so.3.0.0
+  283.01KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libhogweed.so.6.4
+  282.81KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libquadmath.so.0.0.0
+  282.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libmp3lame.so.0.0.0
+  278.55KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libxkbcommon.so.0.0.0
+  274.42KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libnettle.so.8.4
+  266.66KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libmount.so.1.1.0
+  254.33KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libsphinxbase.so.3.0.0
+  235.29KB	(stripped!)	/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+  234.10KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libFLAC.so.8.3.0
+  234.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libncursesw.so.6.3
+  230.17KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libflite.so.2.2
+  230.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpng16.so.16.37.0
+  218.17KB	(stripped!)	/usr/lib/x86_64-linux-gnu/librubberband.so.2.1.5
+  215.04KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libblkid.so.1.1.0
+  210.17KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libass.so.9.1.3
+  195.45KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libtinfo.so.6.3
+  195.06KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libsoxr.so.0.1.2
+  190.52KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libva.so.2.1400.0
+  190.31KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libexpat.so.1.8.7
+  186.37KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgdk_pixbuf-2.0.so.0.4200.8
+  178.65KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libk5crypto.so.3.1
+  174.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libvorbis.so.0.4.9
+  166.47KB	(stripped!)	/usr/lib/x86_64-linux-gnu/liblzma.so.5.2.5
+  166.23KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libflite_usenglish.so.2.2
+  162.61KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libxcb.so.1.1.0
+  162.39KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libselinux.so.1
+  162.36KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libnghttp2.so.14.20.1
+  158.45KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libv4lconvert.so.0.0.0
+  150.39KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcdio.so.19.0.0
+  150.30KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgraphite2.so.3.2.1
+  146.25KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgpg-error.so.0.32.1
+  138.58KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libGLX.so.0.0.0
+  138.04KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libdeflate.so.0
+  134.34KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libbrotlicommon.so.1.0.9
+  126.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libidn2.so.0.3.7
+  122.55KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgcc_s.so.1
+  122.22KB	(stripped!)	/usr/lib/x86_64-linux-gnu/liblz4.so.1.9.3
+  119.01KB	(stripped!)	/usr/lib/x86_64-linux-gnu/librtmp.so.1
+  114.04KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libspeex.so.1.5.0
+  106.39KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libz.so.1.2.11
+  106.32KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libfribidi.so.0.4.0
+  102.91KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libsasl2.so.2.0.25
+  102.00KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpangoft2-1.0.so.0.5000.6
+   90.15KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libtasn1.so.6.6.2
+   87.01KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libbsd.so.0.11.5
+   83.45KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libwayland-server.so.0.20.0
+   82.61KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libdrm.so.2.4.0
+   79.73KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXext.so.6.4.0
+   78.88KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libapparmor.so.1.8.2
+   74.54KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXi.so.6.1.0
+   74.30KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libvidstab.so.1.1
+   74.00KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpsl.so.5.3.2
+   73.10KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libbz2.so.1.0.4
+   70.25KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libaribb24.so.0.0.0
+   66.95KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libresolv.so.2
+   66.47KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libsndio.so.7.1
+   66.13KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libpangocairo-1.0.so.0.5000.6
+   65.01KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libjbig.so.0
+   63.26KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libwayland-client.so.0.20.0
+   63.11KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgbm.so.1.0.0
+   62.50KB	(stripped!)	/usr/lib/x86_64-linux-gnu/liblber-2.5.so.0.1.8
+   62.00KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libmysofa.so.1.1.0
+   61.75KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libv4l2.so.0.0.0
+   54.25KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libxcb-render.so.0.0.0
+   50.86KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libkrb5support.so.0.1
+   50.31KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libbrotlidec.so.1.0.9
+   46.61KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXrender.so.1.3.0
+   46.58KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libffi.so.8.1.0
+   46.40KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXrandr.so.2.2.0
+   46.36KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libmd.so.0.0.5
+   46.33KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libwebpmux.so.3.0.8
+   42.47KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXcursor.so.1.0.2
+   41.92KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcairo-gobject.so.2.11600.0
+   40.19KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libthai.so.0.3.1
+   38.11KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcap.so.2.44
+   38.00KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libudfread.so.0.1.0
+   38.00KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgif.so.7.1.0
+   37.97KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libogg.so.0.8.5
+   34.53KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libwayland-cursor.so.0.20.0
+   34.52KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libdecor-0.so.0.100.0
+   34.22KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libxcb-xfixes.so.0.0.0
+   34.15KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcdio_cdda.so.2.0.0
+   34.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libdatrie.so.1.4.0
+   34.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libacl.so.1.1.2301
+   30.20KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libuuid.so.1.3.0
+   30.20KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcdio_paranoia.so.2.0.0
+   30.19KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXfixes.so.3.1.0
+   30.14KB	(stripped!)	/opt/cuda-11.4/targets/x86_64-linux/lib/libOpenCL.so.1.0.0
+   26.69KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libva-x11.so.2.1400.0
+   26.18KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXdmcp.so.6.0.0
+   26.00KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libasyncns.so.0.3.1
+   22.45KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXv.so.1.0.0
+   22.34KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXxf86vm.so.1.0.0
+   22.21KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libgmodule-2.0.so.0.7200.1
+   22.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libkeyutils.so.1.9
+   20.95KB			/usr/lib/x86_64-linux-gnu/libpthread.so.0
+   18.30KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXinerama.so.1.0.0
+   18.29KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXau.so.6.0.0
+   18.16KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libvdpau.so.1.0.0
+   18.08KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libcom_err.so.2.1
+   14.34KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libXss.so.1.0.0
+   14.33KB	(stripped!)	/usr/lib/x86_64-linux-gnu/librt.so.1
+   14.32KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libva-drm.so.2.1400.0
+   14.23KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libxcb-shm.so.0.0.0
+   14.22KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libxcb-shape.so.0.0.0
+   14.10KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libdl.so.2
+   14.04KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libwayland-egl.so.1.20.0
+   13.72KB	(stripped!)	/usr/lib/x86_64-linux-gnu/libX11-xcb.so.1.0.0
+```
+
 # Effects
-You will need to create `/opt` if it's not a directory you use.
+You will need to create `/opt` if it's not a directory you use as this script installs `ffmpeg` as `/opt/bin/ffmpeg`.
 
 ## NVIDIA support
 Enables all these flags if it sees you have the binary `nvidia-smi`:
