@@ -76,7 +76,7 @@ hash nvidia-smi || unset NVIDIASHIT
 if [[ -n $APT_INSTALL ]]; then
     sudo apt install libc-dev-bin libcrypt-dev libtirpc-dev libnsl-dev libc6-dev libgcc-11-dev \
         libstdc++-11-dev libtss2-tcti-device0 icu-devtools libc-devtools libffi-dev libglib2.0-dev-bin uuid-dev \
-        libblkid-dev libsepol1-dev libpcre2-dev libmount-dev libpcre3-dev zlib1g-dev libglib2.0-dev libostree-dev \
+        libblkid-dev libsepol-dev libpcre2-dev libmount-dev libpcre3-dev zlib1g-dev libglib2.0-dev libostree-dev \
         libicu-dev libxml2-dev libflatpak-dev libssl-dev libuv1-dev libnode-dev autotools-dev libltdl-dev \
         libdvdcss-dev libnuma-dev x11proto-dev libxau-dev libxdmcp-dev xtrans-dev libpthread-stubs0-dev \
         libxcb1-dev libx11-dev libglx-dev libgl-dev libglvnd-core-dev libegl-dev libgles-dev libopengl-dev \
@@ -95,16 +95,16 @@ if [[ -n $APT_INSTALL ]]; then
         x11proto-xinerama-dev libxinerama-dev libxkbcommon-dev x11proto-randr-dev libxrandr-dev libgtk-3-dev \
         libspiro-dev libstdc++-10-dev libcub-dev libnvidia-ml-dev libvdpau-dev libcupti-dev libthrust-dev \
         nvidia-cuda-dev ocl-icd-opencl-dev nvidia-opencl-dev libnunit-cil-dev libmpv-dev libnvidia-ml-dev \
-        nvidia-cuda-dev libgcc-8-dev libstdc++-8-dev libgcc-9-dev libstdc++-9-dev libwebp-dev libigdgmm-dev \
+        nvidia-cuda-dev nvidia-cuda-toolkit libgcc-9-dev libstdc++-9-dev libwebp-dev libigdgmm-dev \
         libva-dev libarchive-dev libleptonica-dev libtesseract-dev libavutil-dev libswresample-dev libavcodec-dev \
         libavformat-dev libraw1394-dev libdc1394-dev libexif-dev libgdcm-dev libgphoto2-dev libilmbase-dev \
         libtbb-dev libopenexr-dev libswscale-dev libudfread-dev libbluray-dev libspeex-dev librsvg2-dev \
         liblcms2-dev libvulkan-dev libplacebo-dev libdevil-dev libssh-dev libv4l-dev libpulse-dev libslang2-dev \
         libcaca-dev libxcb-shape0-dev libxcb-xfixes0-dev libpciaccess-dev libdrm-dev libdavs2-dev \
         frei0r-plugins-dev libaribb24-dev libcdio-dev glslang-dev libvidstab-dev liblensfun-dev libnspr4-dev \
-        libnss3-dev libpcap0.8-dev libsrtp2-dev libsrt-openssl-dev libsrt-gnutls-dev libcdio-cdda-dev \
+        libnss3-dev libpcap0.8-dev libsrtp2-dev libsrt-gnutls-dev libcdio-cdda-dev \
         libcdio-paranoia-dev libsoxr-dev libsphinxbase-dev libpocketsphinx-dev librubberband-dev libmysofa-dev \
-        flite1-dev libsdl2-dev
+        flite1-dev libsdl2-dev nasm yasm
 fi
 
 ncols=$(/bin/bash -c 'tput cols') PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
@@ -123,7 +123,7 @@ ncols=$(/bin/bash -c 'tput cols') PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configu
     --enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio --enable-libvidstab \
     --enable-libsrt --enable-libglslang --enable-libsoxr --enable-pocketsphinx --enable-libflite \
     \
-    --enable-gpl --enable-avisynth \
+    --enable-gpl \
     \
     --enable-libaribb24 --enable-version3 \
     \

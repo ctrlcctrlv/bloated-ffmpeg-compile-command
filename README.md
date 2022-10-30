@@ -320,7 +320,6 @@ Enables all these libraries also:
 1. --enable-libfribidi
 1. --enable-libspeex
 1. --enable-librsvg
-1. --enable-avisynth
 1. --enable-libssh
 1. --enable-libpulse
 1. --enable-libcaca
