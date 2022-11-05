@@ -112,7 +112,7 @@ if [[ -n $APT_INSTALL ]]; then
         flite1-dev libsdl2-dev nasm yasm $JXL_DEV
 fi
 
-ncols=$(/bin/bash -c 'tput cols') PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
+ncols=177 PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
     \
     --prefix=/opt \
     \
