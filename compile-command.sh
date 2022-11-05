@@ -138,4 +138,9 @@ ncols=177 PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
     \
     | tee config_stdout.txt
 
+[ ! -z "$NOCOMPILE" ] && exit;
+[ -z "$NOINSTALL" ] && INSTALL_FLAG='install'
+
+make -j $((`nproc` + 1)) $NOINSTALL
+
 set +x
