@@ -60,6 +60,11 @@ done
 )
 
 hash nvidia-smi || unset NVIDIASHIT
+export ENABLE_JXL JXL_DEV
+HAS_JXL=$(apt-cache search libjxl|wc -l)
+[ $HAS_JXL -ne 0 ] && \
+ENABLE_JXL="--enable-libjxl" && \
+JXL_DEV="libjxl-dev"
 
 # I generated the below command from:
 #
@@ -104,7 +109,7 @@ if [[ -n $APT_INSTALL ]]; then
         frei0r-plugins-dev libaribb24-dev libcdio-dev glslang-dev libvidstab-dev liblensfun-dev libnspr4-dev \
         libnss3-dev libpcap0.8-dev libsrtp2-dev libsrt-gnutls-dev libcdio-cdda-dev \
         libcdio-paranoia-dev libsoxr-dev libsphinxbase-dev libpocketsphinx-dev librubberband-dev libmysofa-dev \
-        flite1-dev libsdl2-dev nasm yasm
+        flite1-dev libsdl2-dev nasm yasm $JXL_DEV
 fi
 
 ncols=$(/bin/bash -c 'tput cols') PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
@@ -129,6 +134,8 @@ ncols=$(/bin/bash -c 'tput cols') PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configu
     \
     --enable-libmysofa \
     \
-    --enable-ffplay --disable-stripping --enable-debug | tee config_stdout.txt
+    --enable-ffplay --disable-stripping --enable-debug $ENABLE_JXL \
+    \
+    | tee config_stdout.txt
 
 set +x
