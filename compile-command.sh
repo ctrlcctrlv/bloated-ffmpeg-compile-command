@@ -109,7 +109,7 @@ if [[ -n $APT_INSTALL ]]; then
         frei0r-plugins-dev libaribb24-dev libcdio-dev glslang-dev libvidstab-dev liblensfun-dev libnspr4-dev \
         libnss3-dev libpcap0.8-dev libsrtp2-dev libsrt-gnutls-dev libcdio-cdda-dev \
         libcdio-paranoia-dev libsoxr-dev libsphinxbase-dev libpocketsphinx-dev librubberband-dev libmysofa-dev \
-        flite1-dev libsdl2-dev nasm yasm libx264-dev libx265-dev $JXL_DEV
+        flite1-dev libsdl2-dev nasm yasm libx264-dev libx265-dev libzvbi-dev $JXL_DEV
 fi
 
 ncols=177 PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
@@ -126,12 +126,10 @@ ncols=177 PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
     --enable-libfontconfig --enable-libbluray --enable-libv4l2 --enable-libfribidi --enable-libspeex \
     --enable-librsvg --enable-libssh --enable-libpulse --enable-libcaca --enable-librubberband \
     --enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio --enable-libvidstab \
-    --enable-libsrt --enable-libglslang --enable-libsoxr --enable-pocketsphinx --enable-libflite --enable-libx264 --enable-libx265 \
-    \
+    --enable-libsrt --enable-libglslang --enable-libsoxr --enable-pocketsphinx --enable-libflite \
+    --enable-libx264 --enable-libx265 --enable-vdpau --enable-libzimg \
     --enable-gpl \
-    \
-    --enable-libaribb24 --enable-version3 \
-    \
+    --enable-libaribb24 --enable-version3 --enable-libzvbi \
     --enable-libmysofa \
     \
     --enable-ffplay --disable-stripping --enable-debug $ENABLE_JXL \
