@@ -112,7 +112,9 @@ if [[ -n $APT_INSTALL ]]; then
         flite1-dev libsdl2-dev nasm yasm libx264-dev libx265-dev libzvbi-dev $JXL_DEV
 fi
 
-ncols=177 PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
+[ -z "$NOCLEAN" ] && make clean
+
+[ -n "$NOCONFIGURE" ] || ncols=177 PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
     \
     --prefix=/opt \
     \
