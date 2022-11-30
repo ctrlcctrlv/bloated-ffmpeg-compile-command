@@ -1,4 +1,4 @@
-# Bloated `ffmpeg` compile command v1.2.20221105
+# Bloated `ffmpeg` compile command v1.2.20221130
 
 only tested in Ubuntu but should work in Debian
 
@@ -42,11 +42,11 @@ What it says on the tin.
 A friend saw my absurd `ffmpeg` invocation banner:
 
 ```plain
-ffmpeg version N-108942-g1dc8d82da9 Copyright (c) 2000-2022 the FFmpeg developers
+ffmpeg version N-109274-gd7a5f068c2 Copyright (c) 2000-2022 the FFmpeg developers
   **OwO what's this?**
-  configuration: --prefix=/opt --enable-shared --enable-nvenc --enable-nvdec
-  --enable-nonfree --enable-cuda-nvcc --enable-libnpp
-  --extra-cflags=-I/usr/local/cuda/include
+  configuration: --prefix=/opt --cc=clang --cxx=clang++ --enable-shared
+  --enable-nvenc --enable-nvdec --enable-nonfree --enable-cuda-nvcc
+  --enable-libnpp --extra-cflags=-I/usr/local/cuda/include
   --extra-ldflags='-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec'
   --enable-filter='stereo3d,asr,sofalizer' --enable-libaom --enable-libass
   --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus
@@ -57,14 +57,15 @@ ffmpeg version N-108942-g1dc8d82da9 Copyright (c) 2000-2022 the FFmpeg developer
   --enable-libssh --enable-libpulse --enable-libcaca --enable-librubberband
   --enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio
   --enable-libvidstab --enable-libsrt --enable-libglslang --enable-libsoxr
-  --enable-pocketsphinx --enable-libflite --enable-libjxl --enable-libx264
-  --enable-libx265 --enable-gpl --enable-libaribb24 --enable-version3
-  --enable-libmysofa --enable-ffplay --disable-stripping --enable-debug
-  libavutil      57. 41.100 / 57. 41.100
-  libavcodec     59. 51.101 / 59. 51.101
-  libavformat    59. 34.101 / 59. 34.101
+  --enable-pocketsphinx --enable-libflite --enable-libx264 --enable-libx265
+  --enable-vdpau --enable-libzimg --enable-gpl --enable-libaribb24
+  --enable-version3 --enable-libzvbi --enable-libmysofa --enable-ffplay
+  --enable-stripping --disable-debug --enable-libjxl
+  libavutil      57. 43.100 / 57. 43.100
+  libavcodec     59. 54.100 / 59. 54.100
+  libavformat    59. 34.102 / 59. 34.102
   libavdevice    59.  8.101 / 59.  8.101
-  libavfilter     8. 49.101 /  8. 49.101
+  libavfilter     8. 51.100 /  8. 51.100
   libswscale      6.  8.112 /  6.  8.112
   libswresample   4.  9.100 /  4.  9.100
   libpostproc    56.  7.100 / 56.  7.100
@@ -284,6 +285,8 @@ doc/bin-size.sh ffmpeg | tac # | ansi2txt
 # Effects
 You will need to create `/opt` if it's not a directory you use as this script installs `ffmpeg` as `/opt/bin/ffmpeg`.
 
+Note: I may forget to update this section. Ground truth version to version is always in [`doc/config_stdout.txt`](doc/config_stdout.txt).
+
 ## NVIDIA support
 Enables all these flags if it sees you have the binary `nvidia-smi`:
 1. --enable-nvdec
@@ -335,12 +338,8 @@ Enables all these libraries also:
 1. --enable-libaribb24
 1. --enable-version3
 1. --enable-libmysofa
-
-## Debugging help
-And applies these:
-1. --enable-ffplay
-1. --disable-stripping
-1. --enable-debug
+1. --enable-libzimg
+1. --enable-libzvbi
 
 ## OwO what's this?
 Although easy to interpret as a joke in the above text, this was not one:
