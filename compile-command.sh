@@ -117,6 +117,7 @@ fi
 [ -n "$NOCONFIGURE" ] || ncols=177 PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
     \
     --prefix=/opt \
+    --cc=clang --cxx=clang++ \
     \
     "${NVIDIASHIT[@]}" \
     \
