@@ -49,7 +49,7 @@ for f in *.patch; do
     fi
 done
 
-(hash nvidia-smi && test ! -e /opt/include/ffnvcodec/nvEncodeAPI.h) && ( \
+((hash nvidia-smi && test ! -e /opt/include/ffnvcodec/nvEncodeAPI.h) || test -n "$FORCE_REBUILD_NVIDIA") && ( \
     >&2 echo "Will install nv-codec-headers to /opt in 1s" && sleep 1 && \
     TEMPDIR=`mktemp -d --suffix=_nvidia_codec_headers_git` && \
     git clone 'https://git.videolan.org/git/ffmpeg/nv-codec-headers.git' "$TEMPDIR" && \
