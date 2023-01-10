@@ -115,6 +115,8 @@ fi
 
 [ -z "$NOCLEAN" ] && make clean
 
+[ -n "$NODEBUG" ] && DEBUG='--enable-stripping --disable-debug' || DEBUG='--disable-stripping --enable-debug'
+
 [ -n "$NOCONFIGURE" ] || ncols=177 PKG_CONFIG_PATH='/opt/lib/pkgconfig' ./configure \
     \
     --prefix=/opt \
@@ -135,8 +137,8 @@ fi
     --enable-gpl \
     --enable-libaribb24 --enable-version3 --enable-libzvbi \
     --enable-libmysofa \
-    \
-    --enable-ffplay --disable-stripping --enable-debug $ENABLE_JXL \
+    --enable-ffplay \
+    $DEBUG $ENABLE_JXL \
     \
     | tee config_stdout.txt
 

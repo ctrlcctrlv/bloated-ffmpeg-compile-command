@@ -1,4 +1,4 @@
-# Bloated `ffmpeg` compile command v1.2.20221130
+# Bloated `ffmpeg` compile command v1.2.20230110
 
 only tested in Ubuntu but should work in Debian
 
@@ -42,35 +42,33 @@ What it says on the tin.
 A friend saw my absurd `ffmpeg` invocation banner:
 
 ```plain
-ffmpeg version N-109274-gd7a5f068c2 Copyright (c) 2000-2022 the FFmpeg developers
-  **OwO what's this?**
-  configuration: --prefix=/opt --cc=clang --cxx=clang++ --enable-shared
-  --enable-nvenc --enable-nvdec --enable-nonfree --enable-cuda-nvcc
-  --enable-libnpp --extra-cflags=-I/usr/local/cuda/include
-  --extra-ldflags='-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec'
-  --enable-filter='stereo3d,asr,sofalizer' --enable-libaom --enable-libass
-  --enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus
-  --enable-libdav1d --enable-libvorbis --enable-libvpx --enable-nonfree
-  --enable-vaapi --enable-opencl --enable-opengl --enable-libtesseract
-  --enable-libwebp --enable-openssl --enable-libfontconfig --enable-libbluray
-  --enable-libv4l2 --enable-libfribidi --enable-libspeex --enable-librsvg
-  --enable-libssh --enable-libpulse --enable-libcaca --enable-librubberband
-  --enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio
-  --enable-libvidstab --enable-libsrt --enable-libglslang --enable-libsoxr
-  --enable-pocketsphinx --enable-libflite --enable-libx264 --enable-libx265
-  --enable-vdpau --enable-libzimg --enable-gpl --enable-libaribb24
-  --enable-version3 --enable-libzvbi --enable-libmysofa --enable-ffplay
-  --enable-stripping --disable-debug --enable-libjxl
-  libavutil      57. 43.100 / 57. 43.100
-  libavcodec     59. 54.100 / 59. 54.100
-  libavformat    59. 34.102 / 59. 34.102
-  libavdevice    59.  8.101 / 59.  8.101
-  libavfilter     8. 51.100 /  8. 51.100
-  libswscale      6.  8.112 /  6.  8.112
-  libswresample   4.  9.100 /  4.  9.100
-  libpostproc    56.  7.100 / 56.  7.100
-Hyper fast Audio and Video encoder
-usage: ffmpeg [options] [[infile options] -i infile]... {[outfile options] outfile}...
+[1mOwO what's this?(B[m
+ffmpeg version N-109562-g0431f9805e Copyright (c) 2000-2023 the FFmpeg developers
+configuration: --prefix=/opt --cc=clang --cxx=clang++ --enable-shared
+--enable-nvenc --enable-nvdec --enable-nonfree --enable-cuda-nvcc
+--enable-libnpp --extra-cflags=-I/usr/local/cuda/include
+--extra-ldflags='-L/usr/local/cuda/lib64 -L/opt/include/ffnvcodec'
+--enable-filter='stereo3d,asr,sofalizer' --enable-libaom --enable-libass
+--enable-libfdk-aac --enable-libfreetype --enable-libmp3lame --enable-libopus
+--enable-libdav1d --enable-libvorbis --enable-libvpx --enable-nonfree
+--enable-vaapi --enable-opencl --enable-opengl --enable-libtesseract
+--enable-libwebp --enable-openssl --enable-libfontconfig --enable-libbluray
+--enable-libv4l2 --enable-libfribidi --enable-libspeex --enable-librsvg
+--enable-libssh --enable-libpulse --enable-libcaca --enable-librubberband
+--enable-libxcb-xfixes --enable-libdavs2 --enable-frei0r --enable-libcdio
+--enable-libvidstab --enable-libsrt --enable-libglslang --enable-libsoxr
+--enable-pocketsphinx --enable-libflite --enable-libx264 --enable-libx265
+--enable-vdpau --enable-libzimg --enable-libsvtav1 --enable-gpl
+--enable-libaribb24 --enable-version3 --enable-libzvbi --enable-libmysofa
+--enable-ffplay --disable-stripping --enable-debug --enable-libjxl
+libavutil      57. 43.100 / 57. 43.100
+libavcodec     59. 56.100 / 59. 56.100
+libavformat    59. 34.102 / 59. 34.102
+libavdevice    59.  8.101 / 59.  8.101
+libavfilter     8. 53.100 /  8. 53.100
+libswscale      6.  8.112 /  6.  8.112
+libswresample   4.  9.100 /  4.  9.100
+libpostproc    56.  7.100 / 56.  7.100
 ```
 
 And wanted to know how I got it. This version of ffmpeg has all of [these abilities](https://github.com/ctrlcctrlv/bloated-ffmpeg-compile-command/blob/main/doc/config_stdout.txt).
@@ -340,6 +338,7 @@ Enables all these libraries also:
 1. --enable-libmysofa
 1. --enable-libzimg
 1. --enable-libzvbi
+1. --enable-libsvtav1
 
 ## OwO what's this?
 Although easy to interpret as a joke in the above text, this was not one:
