@@ -1,8 +1,6 @@
-# Bloated `ffmpeg` compile command v2.0.20230429
+# Bloated `ffmpeg` compile command v1.2.20230110
 
-only tested in <s>Ubuntu</s> Arch but should work in <s>Debian</s> Parabola
-
-UPDATE 2023-04-29: This is now an Arch PKGBUILD and is [ffmpeg-intel-full-git](https://aur.archlinux.org/packages/ffmpeg-intel-full-git).
+only tested in Ubuntu but should work in Debian
 
 ```plain
 #########################################################################
